@@ -45,4 +45,47 @@ public class ChromeSeleniumTest {
         String actual = driver.findElement(By.cssSelector("[data-test-id='order-success']")).getText().trim();
         assertEquals(expected, actual);
     }
+    @Test
+    public void shouldFillByInvalidName() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("James Bond");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79123456789");
+        driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.className("button")).click();
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        String actual = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText();
+        assertEquals(expected, actual);
+    }
+
+        @Test
+        public void shouldFillByInvalidPhoneNumber() {
+            driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Петров-Иванов");
+            driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("something else");
+            driver.findElement(By.className("checkbox__box")).click();
+            driver.findElement(By.className("button")).click();
+            String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
+            String actual = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
+
+    }
+
+    @Test
+    public void shouldTrySendIfNameIsVoid() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79123456789");
+        driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.className("button")).click();
+        String expected = "Поле обязательно для заполнения";
+        String actual = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText();
+    }
+    @Test
+    public void shouldTrySendIfPhoneNumberIsVoid() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Петров-Иванов");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("");
+        driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.className("button")).click();
+        String expected = "Поле обязательно для заполнения";
+        String actual = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
+
+    }
+
+
 }
